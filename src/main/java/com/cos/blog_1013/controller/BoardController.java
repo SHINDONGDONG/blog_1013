@@ -7,6 +7,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.cos.blog_1013.repository.BoardRepository;
 import com.cos.blog_1013.service.BoardService;
@@ -31,4 +32,12 @@ public class BoardController {
 	public String saveForm() {
 		return "board/saveForm";
 	}
+	
+	@GetMapping("/board/{id}")
+	public String boardDetail(@PathVariable int id,Model model) {
+		model.addAttribute("board", boardService.boardDetail(id));
+		return "board/detail";
+	}
+	
+	
 }

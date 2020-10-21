@@ -28,4 +28,16 @@ public class BoardService {
 		return boardRepository.findAll(pageable);
 	}
 	
+	@Transactional(readOnly = true)
+	public Board boardDetail(int id) {
+		return boardRepository.findById(id).orElseThrow(()->{
+			return new IllegalArgumentException("없는 아이디입니다,"); 
+		});
+	}
+	
+	@Transactional
+	public void delete(int id) {
+		boardRepository.deleteById(id);
+	}
+	
 }
