@@ -12,12 +12,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.cos.blog_1013.config.auth.PrincipalService;
+import com.cos.blog_1013.config.oauth2.PrincipalOauth2Service;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
+	@Autowired
+	private PrincipalOauth2Service principalOauth2Service;
+	
 	@Autowired
 	private PrincipalService principalService;
 	
@@ -42,6 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.csrf().disable();
 		http
 			.authorizeRequests()
+			.antMatchers("/user/**").authenticated()
+			.antMatchers("/manager/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')")
+			.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
 			.antMatchers("/","/auth/**","/js/**","/css/**","/image/**")
 			.permitAll()
 			.anyRequest()
@@ -50,7 +57,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 			.formLogin()
 			.loginPage("/auth/loginForm")
 			.loginProcessingUrl("/auth/loginProc")
-			.defaultSuccessUrl("/");
+			.defaultSuccessUrl("/")
+			.and()
+			.oauth2Login()
+			.loginPage("/loginForm")
+			.userInfoEndpoint()
+			.userService(principalOauth2Service);
 	}
 	
 }

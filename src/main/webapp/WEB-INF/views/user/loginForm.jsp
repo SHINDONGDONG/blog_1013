@@ -13,6 +13,7 @@
     <input type="password" name="password" class="form-control" placeholder="Enter password" id="password">
   </div>
   <button type="submit" class="btn btn-primary">로그인</button>
+  <a href="/oauth2/authorization/google" class="btn btn-danger">구글 로그인</a>
 </form>
 </div>
 <br />
