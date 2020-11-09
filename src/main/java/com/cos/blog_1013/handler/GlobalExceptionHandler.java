@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cos.blog_1013.dto.ResponseDTO;
 
-@ControllerAdvice
 @RestController
+@ControllerAdvice
 public class GlobalExceptionHandler{
 	
 	/*

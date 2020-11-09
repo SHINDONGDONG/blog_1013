@@ -37,4 +37,15 @@ public class UserService {
 //		return userRepository.findByUsernameAndPassword(user.getUsername(),user.getPassword());
 //	}
 	
+	@Transactional
+	public void updateUser(User requestUser) {
+		User user = userRepository.findById(requestUser.getId()).orElseThrow(()->{
+			return new IllegalArgumentException("유저를 찾지못하여 수정에 실패함");
+		});
+		String rawPass = requestUser.getPassword();
+		String encPass = bCryptPasswordEncoder.encode(rawPass);
+		user.setPassword(encPass);
+		user.setEmail(requestUser.getEmail());
+	}
+	
 }

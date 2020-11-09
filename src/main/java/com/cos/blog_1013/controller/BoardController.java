@@ -38,6 +38,12 @@ public class BoardController {
 		model.addAttribute("board", boardService.boardDetail(id));
 		return "board/detail";
 	}
+
+	@GetMapping("/board/{id}/updateForm")
+	public String boardForm(@PathVariable int id,Model model) {
+		model.addAttribute("board", boardService.boardDetail(id));
+		return "board/updateForm";
+	}
 	
 	
 }

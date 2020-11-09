@@ -2,8 +2,13 @@ package com.cos.blog_1013.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +21,9 @@ import com.cos.blog_1013.service.UserService;
 public class UserApiController {
 
 	@Autowired
+	private AuthenticationManager authenticationManager;
+	
+	@Autowired
 	private UserService userService;
 
 	@Transactional
@@ -25,6 +33,18 @@ public class UserApiController {
 		user.setRole(RoleType.USER);
 		userService.save(user);
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 1);
+	}
+	
+	@PutMapping("/user")
+	public ResponseDTO<Integer> update(@RequestBody User user){
+		System.out.println("user api update 호출함");
+		userService.updateUser(user);
+		
+		Authentication authentication = authenticationManager.authenticate
+				(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 1);
+		
 	}
 
 //	@PostMapping("/api/user/login")
